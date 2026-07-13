@@ -331,7 +331,7 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 ## 👤 Author
 
 **Aditya Yadav**  
-*Data Scientist & Machine Learning Engineer*  
-- **GitHub:** [Aditya Yadav](https://github.com/adityayadav) *(Placeholder)*
-- **LinkedIn:** [Aditya Yadav](https://linkedin.com/in/adityayadav) *(Placeholder)*
-- **Email:** aditya.yadav@example.com *(Placeholder)*
+
+- **GitHub:** [Aditya Yadav](https://github.com/Aditya00010) *(Placeholder)*
+
+
