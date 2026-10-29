@@ -50,7 +50,7 @@ This log documents the key design decisions, engineering choices, and modeling r
   * `learning_rate`: 0.05
   * `colsample_bytree`: 0.8
   * `scale_pos_weight` (imbalance handling ratio): 2.7758
-* **Model Serialization:** Persisted to [models/best_churn_model.pkl](file:///d:/Projects/DATA%20SCIENCE%20PROJECTS/Customer-Churn-Prediction/models/best_churn_model.pkl).
+* **Model Serialization:** Persisted to [models/best_churn_model.pkl](models/best_churn_model.pkl).
 
 ### Final Model Comparison (Ranked by ROC-AUC)
 

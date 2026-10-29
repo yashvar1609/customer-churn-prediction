@@ -1,16 +1,11 @@
 # Telco Customer Churn Prediction & Explainable AI (SHAP) Dashboard
 
 <p align="center">
-  <img src="assets/banner.png" alt="Customer Churn Prediction Banner" width="100%">
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.11">
   <img src="https://img.shields.io/badge/XGBoost-1.7+-green?style=for-the-badge&logo=xgboost&logoColor=white" alt="XGBoost">
   <img src="https://img.shields.io/badge/Streamlit-1.25+-red?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit">
   <img src="https://img.shields.io/badge/Scikit--Learn-1.2+-orange?style=for-the-badge&logo=scikit-learn&logoColor=white" alt="Scikit-Learn">
   <img src="https://img.shields.io/badge/SHAP-0.42-purple?style=for-the-badge" alt="SHAP">
-  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
 </p>
 
 <p align="center">
@@ -18,21 +13,17 @@
 </p>
 
 <p align="center">
-  <a href="#setup--installation">Run Locally</a> · <a href="#key-results">Key Results</a> · <a href="#explainability-shap">SHAP Insights</a> · <a href="notebooks/">View Notebooks</a>
+  <a href="#setup--installation">Run Locally</a> · <a href="#key-results">Key Results</a> · <a href="#explainability-shap">SHAP Insights</a>
 </p>
 
 ---
 
 ## 🖥️ Interactive Dashboard Preview
 
-Below is a preview of the Streamlit dashboard in action. Users can input a customer's demographic, contract, and billing details in the sidebar, click predict, and instantly get:
+Users can enter a customer's demographic, contract, and billing details in the dashboard, then get:
 1. A visual risk metric card (**Low/Medium/High Risk**).
 2. A dynamically calculated **SHAP Waterfall Plot** showing exactly which features pushed this specific customer towards or away from churn.
 3. A tailored **Retention Playbook** with automated marketing actions based on the customer's high-risk features.
-
-<p align="center">
-  <img src="assets/screenshots/hero-dashboard.png" alt="Streamlit App Dashboard Hero Screenshot" width="90%">
-</p>
 
 ---
 
@@ -40,7 +31,6 @@ Below is a preview of the Streamlit dashboard in action. Users can input a custo
 
 - [Overview](#overview)
 - [Key Results](#key-results)
-- [Demo Screenshots](#demo-screenshots)
 - [Project Architecture](#project-architecture)
 - [Dataset](#dataset)
 - [Methodology](#methodology)
@@ -51,7 +41,6 @@ Below is a preview of the Streamlit dashboard in action. Users can input a custo
 - [Setup & Installation](#setup--installation)
 - [Usage](#usage)
 - [Key Learnings & Design Decisions](#key-learnings--design-decisions)
-- [License](#license)
 - [Author](#author)
 
 ---
@@ -91,38 +80,11 @@ We compared 12 combinations across 4 model families and 3 class-imbalance strate
 
 > **Why ROC-AUC and Recall Over Accuracy:** The dataset exhibits a ~73/27 class imbalance. A naive model predicting "no churn" for everyone would score 73.5% accuracy but catch zero actual churners. We optimized for ROC-AUC to secure robust ranking quality, and maximized Recall to capture 79.3% of churners, preventing expensive lost customer revenue (False Negatives).
 
-### Evaluation Visualizations
-
-<p align="center">
-  <img src="reports/figures/07_roc_curves.png" alt="ROC Curve Comparison Chart" width="48%">
-  <img src="reports/figures/09_confusion_matrices.png" alt="Confusion Matrix" width="48%">
-</p>
-
----
-
-## 📷 Demo Screenshots
-
-### 1. Sidebar Input Form
-Allows input of demographic data, account tenure, payment type, monthly charges, and service subscriptions.
-<p align="center">
-  <img src="assets/screenshots/input-form.png" alt="Streamlit Input Form UI Screenshot" width="80%">
-</p>
-
-### 2. Prediction Assessment & Actions
-Displays the color-coded Churn Risk card along with customized actions.
-<p align="center">
-  <img src="assets/screenshots/prediction-result.png" alt="Streamlit Prediction Result and Recommendations Screenshot" width="80%">
-</p>
-
 ---
 
 ## ⚙️ Project Architecture
 
-The diagram below maps our workflow from raw data ingestion to dashboard deployment:
-
-<p align="center">
-  <img src="assets/workflow.svg" alt="Project Workflow Diagram" width="100%">
-</p>
+The training script reads the raw dataset, preprocesses features, and saves the model artifacts. The Streamlit app loads those artifacts and uses the same preprocessing logic to score customer inputs and explain predictions.
 
 ---
 
@@ -132,10 +94,6 @@ The diagram below maps our workflow from raw data ingestion to dashboard deploym
 - **Size:** 7,043 customers, 21 columns
 - **Target Distribution:** 5,174 stayed (73.47%), 1,869 churned (26.53%).
 - **Feature Categories:** Demographics (gender, senior status), Account settings (tenure, contract, charges), Subscribed services (DSL/Fiber optic, security, backup, tech support).
-
-<p align="center">
-  <img src="reports/figures/01_churn_distribution.png" alt="Churn Target Distribution" width="60%">
-</p>
 
 ---
 
@@ -150,11 +108,6 @@ The diagram below maps our workflow from raw data ingestion to dashboard deploym
 * **Contract Type:** Month-to-month customers churned at **~43%** compared to 1-year (~11%) and 2-year (~3%) agreements.
 * **Manual Billing Friction:** Customers paying via manual **Electronic Check** churned at **~45%**, while automatic billing users churned at only **~15%**.
 * **Internet Quality:** **Fiber Optic** users had an alarming churn rate of **~42%** (indicating potential price hikes or service dissatisfaction).
-
-<p align="center">
-  <img src="reports/figures/02_churn_vs_categoricals.png" alt="Categorical Features vs. Churn Rate" width="48%">
-  <img src="reports/figures/06_correlation_heatmap.png" alt="Correlation Heatmap" width="48%">
-</p>
 
 ### 3. Feature Engineering
 We engineered 4 derived features based on business domain hypotheses:
@@ -171,34 +124,21 @@ Multicollinearity analysis revealed a correlation of **0.957** between `avg_mont
 * **The Decision:** We dropped `TotalCharges` and `avg_monthly_spend` at training time **strictly for Logistic Regression** to prevent coefficient instability and sign inversion. We kept them for tree-based models (Random Forest, XGBoost), which handle multicollinear splits natively.
 
 ### 5. Machine Learning Pipeline
-Our end-to-end training pipeline is visualized below:
-
-<p align="center">
-  <img src="assets/ml_pipeline.svg" alt="Machine Learning Pipeline Diagram" width="100%">
-</p>
+The pipeline in `src/train.py` cleans and engineers the data, encodes categorical variables, scales numeric features, trains the XGBoost model, and saves artifacts for the app.
 
 ---
 
 ## 🧠 Explainability (SHAP)
 
-We utilized SHAP values to explain global model drivers and individual local risk predictions.
-
-<p align="center">
-  <img src="reports/figures/10_shap_summary.png" alt="SHAP Beeswarm Summary Plot" width="49%">
-  <img src="reports/figures/11_shap_bar.png" alt="SHAP Global Bar Plot" width="49%">
-</p>
+We utilize SHAP values to explain global model drivers and individual local risk predictions.
 
 ### Key Global SHAP Insights:
 * **Tenure is the Anchor:** Low tenure (blue dots) strongly increases churn risk, while high tenure (red dots) pull predictions towards retention.
 * **Billing Friction:** Manual payment via electronic check significantly increases churn risk, whereas automated billing acts as a strong loyalty anchor.
 * **Fiber Optic Discrepancy:** Subscribing to Fiber Optic internet is associated with high churn risk, while DSL shows a protective effect.
 
-### SHAP Dependence Plot
-We plotted `tenure` vs. its SHAP value, colored by `MonthlyCharges`. Churn risk decays non-linearly, crossing the neutral line at ~20 months. High monthly charges (red dots) escalate risk heavily for new customers (0-12 months) but have no effect on long-term customers.
-
-<p align="center">
-  <img src="reports/figures/14_shap_dependence.png" alt="SHAP Dependence Plot" width="60%">
-</p>
+### SHAP Dependence Insight
+The relationship between tenure and churn risk is non-linear, crossing the neutral line at ~20 months. High monthly charges increase risk for new customers (0-12 months) but have less effect on long-term customers.
 
 ### Local Case Studies (Waterfall Plots)
 
@@ -206,12 +146,6 @@ We compared three individual customer profiles:
 1. **High-Risk Profile (~94% Churn Prob):** Low tenure, month-to-month contract, paying via electronic check, and subscribing to fiber optic internet. All factors push the risk higher.
 2. **Low-Risk Profile (~1.5% Churn Prob):** High tenure (65 months), two-year contract, and automatic billing. The contract type and tenure completely override high monthly fees.
 3. **Borderline Profile (~50.1% Churn Prob):** A customer standing exactly at the decision boundary. Their month-to-month contract and manual check payment push them towards churn, but their 35-month tenure and high number of active services (5) pull them back. This represents the prime target for business intervention.
-
-<p align="center">
-  <img src="reports/figures/12_shap_waterfall_high.png" alt="SHAP Waterfall High-Risk" width="32%">
-  <img src="reports/figures/13_shap_waterfall_low.png" alt="SHAP Waterfall Low-Risk" width="32%">
-  <img src="reports/figures/15_shap_waterfall_borderline.png" alt="SHAP Waterfall Borderline" width="32%">
-</p>
 
 ---
 
@@ -232,7 +166,7 @@ The Streamlit app triggers the following rule-based playbook based on customer r
 ## 🛠️ Tech Stack
 
 * **Language:** Python 3.11
-* **Data Processing & ML:** Pandas, NumPy, Scikit-Learn, XGBoost, Imbalanced-Learn
+* **Data Processing & ML:** Pandas, NumPy, Scikit-Learn, XGBoost
 * **Explainable AI:** SHAP
 * **Visualization:** Matplotlib, Seaborn
 * **Deployment:** Streamlit
@@ -246,30 +180,13 @@ The Streamlit app triggers the following rule-based playbook based on customer r
 Customer-Churn-Prediction/
 ├── app/
 │   └── streamlit_app.py        # Streamlit App
-├── assets/
-│   ├── screenshots/            # App screenshots for README
-│   ├── banner.png              # Header Banner
-│   ├── workflow.svg            # Pipeline diagram
-│   └── ml_pipeline.svg         # ML pipeline diagram
 ├── data/
-│   ├── raw/
-│   │   └── WA_Fn-UseC_-Telco-Customer-Churn.csv  # Raw dataset
-│   └── processed/
-│       ├── X_train.csv
-│       ├── y_train.csv
-│       ├── X_test.csv
-│       └── y_test.csv
+│   └── raw/
+│       └── WA_Fn-UseC_-Telco-Customer-Churn.csv  # Raw dataset
 ├── models/
 │   ├── best_churn_model.pkl    # Serialized tuned XGBoost model
 │   ├── scaler.pkl              # Serialized StandardScaler
 │   └── model_features.pkl      # Serialized training features schema
-├── notebooks/
-│   ├── 01_eda_and_cleaning.ipynb
-│   ├── 02_feature_engineering_and_selection.ipynb
-│   ├── 03_modeling_and_evaluation.ipynb
-│   └── 04_explainability.ipynb
-├── reports/
-│   └── figures/                # 16 Saved plots & SHAP outputs
 ├── src/
 │   ├── preprocessing.py        # Preprocessor module
 │   └── train.py                # Pipeline execution script
@@ -285,8 +202,8 @@ Customer-Churn-Prediction/
 ### 1. Clone & Set Up Environment
 ```bash
 # Clone the repository
-git clone https://github.com/aditya-yadav/Customer-Churn-Prediction.git
-cd Customer-Churn-Prediction
+git clone https://github.com/Aditya00010/customer-churn-prediction-xgboost-.git
+cd customer-churn-prediction-xgboost-
 
 # Create and activate virtual environment
 python -m venv venv
@@ -324,7 +241,7 @@ Open `http://localhost:8501` in your browser.
 
 ## 📄 License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details (or it is open for portfolio and research purposes).
+No license file is currently included. Add a license before allowing others to reuse or redistribute this project.
 
 ---
 
@@ -333,5 +250,3 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 **Aditya Yadav**  
 
 - **GitHub:** [Aditya Yadav](https://github.com/Aditya00010) *(Placeholder)*
-
-
