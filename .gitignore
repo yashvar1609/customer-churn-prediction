@@ -1,57 +1,8 @@
-# Byte-compiled / optimized / DLL files
+venv/
+.venv/
+VENV/
 __pycache__/
 *.py[cod]
-*$py.class
-
-# C extensions
-*.so
-
-# Distribution / packaging
-bin/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Virtual Environment
-.venv/
-venv/
-ENV/
-env/
+.ipynb_checkpoints/
 .env
-
-# Jupyter Notebooks
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
-
-# IDEs and editors
 .vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Models and temporary data
-data/processed/*.csv
-!data/processed/.gitkeep
-# Allow committing our small, serialized model assets
-!models/*.pkl
-!models/.gitkeep
